@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pembe Çalışma Planım</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap">
+<style>
+/* Düzen: tek sütun, üstte hafta şeridi, altta seçili günün listesi; alt barda Gün / Hafta / Dersler.
+   Palet: pudra pembe zemin, beyaz kartlar, kırmızı kurdele vurgusu. Yazı: yuvarlak Fredoka başlık + Nunito gövde. */
+:root{
+  --bg:#fff4f8;--card:#ffffff;--ink:#4d2a3a;--mut:#98697d;--line:#ffd6e4;--soft:#ffe8f0;
+  --pink:#ff7eab;--red:#e8456f;--on-red:#ffffff;--shadow:0 6px 18px rgba(232,69,111,.12);
+  --gingham:rgba(255,126,171,.10);
+  --s-mat:#f0558a;--s-geo:#9d73f0;--s-bio:#1fae80;--s-fiz:#3b9de8;--s-kim:#f08a45;--s-cog:#c99a12;--s-par:#c43b86;--s-dig:#8d7a99;--s-tar:#a8693f;--s-fel:#2b94a3;--s-din:#5878cc;--s-trk:#7d8f1c;--s-amat:#b8346f;--s-afiz:#2272c4;--s-akim:#c9600f;--s-abio:#128a63;
+  --f-d:"Fredoka","Nunito",ui-rounded,system-ui,sans-serif;--f-b:"Nunito",ui-rounded,system-ui,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#2b1721;--card:#3a2029;--ink:#ffe8f0;--mut:#d6a3b6;--line:#5a3343;--soft:#47293a;
+  --pink:#ff8fb8;--red:#ff6f97;--on-red:#2b1721;--shadow:0 6px 18px rgba(0,0,0,.35);--gingham:rgba(255,143,184,.07);
+  --s-mat:#ff7fa8;--s-geo:#b99bff;--s-bio:#45d3a3;--s-fiz:#6fbaff;--s-kim:#ffa56b;--s-cog:#e8c23a;--s-par:#ff8fc6;--s-dig:#b7a5c3;--s-tar:#dba07a;--s-fel:#5fd0dc;--s-din:#93acff;--s-trk:#c0d24c;--s-amat:#ff9cc2;--s-afiz:#93ccff;--s-akim:#ffbb8a;--s-abio:#7fe0bd;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#2b1721;--card:#3a2029;--ink:#ffe8f0;--mut:#d6a3b6;--line:#5a3343;--soft:#47293a;
+  --pink:#ff8fb8;--red:#ff6f97;--on-red:#2b1721;--shadow:0 6px 18px rgba(0,0,0,.35);--gingham:rgba(255,143,184,.07);
+  --s-mat:#ff7fa8;--s-geo:#b99bff;--s-bio:#45d3a3;--s-fiz:#6fbaff;--s-kim:#ffa56b;--s-cog:#e8c23a;--s-par:#ff8fc6;--s-dig:#b7a5c3;--s-tar:#dba07a;--s-fel:#5fd0dc;--s-din:#93acff;--s-trk:#c0d24c;--s-amat:#ff9cc2;--s-afiz:#93ccff;--s-akim:#ffbb8a;--s-abio:#7fe0bd;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:600 16px/1.45 var(--f-b);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px);padding-bottom:0}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+   repeating-linear-gradient(0deg,var(--gingham) 0 22px,transparent 22px 44px),
+   repeating-linear-gradient(90deg,var(--gingham) 0 22px,transparent 22px 44px)}
+h1,h2,h3{font-family:var(--f-d);margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.app{max-width:720px;margin:0 auto;padding-block:18px 128px}
+svg{display:block}
+
+/* üst */
+.top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.bow{width:64px;height:40px;flex:none;filter:drop-shadow(0 3px 4px rgba(232,69,111,.25))}
+.top h1{font-size:clamp(24px,6.4vw,32px);line-height:1.05;font-weight:700;color:var(--red)}
+.top p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.nm{background:transparent;border:0;border-bottom:2px dashed var(--pink);color:var(--ink);font:700 14px var(--f-b);width:9ch;padding:0 2px}
+.nm::placeholder{color:var(--mut);font-weight:600}
+
+.note{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px 16px;border-radius:18px;background:var(--soft);border:2px dashed var(--pink);transform:rotate(-1deg);font:600 16px var(--f-d);color:var(--red);width:fit-content;max-width:100%}
+.note svg{width:20px;height:20px;fill:var(--red);flex:none}
+/* hafta şeridi */
+.wk{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:12px 10px 14px;box-shadow:var(--shadow)}
+.wkh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 4px 10px}
+.wkh b{font:600 17px var(--f-d)}
+.ib{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:var(--soft);display:grid;place-items:center;font-size:20px;line-height:1;padding:0 0 2px}
+.ib:active{transform:scale(.94)}
+.pill{border:2px solid var(--line);background:var(--soft);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:800;color:var(--red)}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.d{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 0 9px;border-radius:18px;border:2px solid transparent;background:transparent}
+.d small{font-size:12px;color:var(--mut);font-weight:800}
+.ring{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--pink) calc(var(--p)*1%),var(--line) 0);position:relative}
+.ring::before{content:"";position:absolute;inset:3.5px;border-radius:50%;background:var(--card)}
+.ring b{position:relative;font:600 15px var(--f-d)}
+.d .n{font-size:11px;color:var(--mut);font-weight:800;min-height:14px}
+.d.on{background:var(--soft);border-color:var(--pink)}
+.d.on .ring::before{background:var(--soft)}
+.d.now small{color:var(--red)}
+.d.now::after{content:"";position:absolute;top:4px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red)}
+
+/* gün paneli */
+.panel{margin-top:16px}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:0 4px 10px}
+.ph h2{font-size:23px;font-weight:600}
+.ph span{color:var(--mut);font-size:14px;font-weight:700}
+.bar{height:12px;border-radius:12px;background:var(--line);overflow:hidden;margin:0 4px 14px}
+.bar i{display:block;height:100%;width:var(--p);border-radius:12px;background:linear-gradient(90deg,var(--pink),var(--red));transition:width .4s}
+.task{--c:var(--s-dig);display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 12px 12px 14px;margin-bottom:9px;border-radius:22px;background:var(--card);border:2px solid var(--line);position:relative}
+.task .ck{position:relative;display:grid}
+.task input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer}
+.box{width:30px;height:30px;border-radius:50%;border:3px solid var(--c);display:grid;place-items:center;transition:background .2s,transform .3s cubic-bezier(.3,1.7,.5,1)}
+.box svg{width:17px;height:17px;fill:#fff;transform:scale(0);transition:transform .25s}
+input:checked+.box{background:var(--c);transform:scale(1.08)}
+input:checked+.box svg{transform:scale(1)}
+input:focus-visible+.box{outline:3px solid var(--red);outline-offset:3px}
+.tx{min-width:0}
+.tx small{display:block;font-size:12.5px;font-weight:800;color:color-mix(in srgb,var(--c) 75%,var(--ink))}
+.tx b{display:block;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.task.done .tx b{color:var(--mut);text-decoration:line-through;text-decoration-thickness:2px}
+.task.done{background:var(--soft)}
+.tb{display:flex;gap:6px}
+.sm{border:2px solid var(--line);background:transparent;border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:800;color:var(--mut)}
+.sm:hover{border-color:var(--pink);color:var(--ink)}
+.sm.x{padding:6px 10px}
+.add{width:100%;margin-top:6px;border:0;border-radius:999px;padding:15px 20px;font:600 18px var(--f-d);color:var(--on-red);background:linear-gradient(120deg,var(--pink),var(--red));box-shadow:var(--shadow)}
+.add:active{transform:scale(.98)}
+.empty{text-align:center;padding:26px 18px;border-radius:26px;border:2px dashed var(--pink);background:var(--card);color:var(--mut);margin-bottom:12px}
+.empty svg{width:56px;height:36px;margin:0 auto 8px}
+.empty b{display:block;font:600 19px var(--f-d);color:var(--ink);margin-bottom:2px}
+
+/* hafta görünümü */
+.wd{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:12px 14px;margin-bottom:10px}
+.wd.now{border-color:var(--pink)}
+.wd header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.wd h3{font-size:17px;font-weight:600}
+.wd header span{font-size:13px;color:var(--mut);font-weight:800}
+.wd ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.wd li{--c:var(--s-dig);display:flex;gap:8px;align-items:baseline;font-size:14.5px;min-width:0}
+.wd li::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--c);transform:translateY(-1px)}
+.wd li.done{color:var(--mut);text-decoration:line-through}
+.wd li span{min-width:0;overflow-wrap:anywhere}
+.wd p{margin:0;color:var(--mut);font-size:14px}
+.wd .go{margin-top:8px}
+
+/* dersler */
+.sub{--c:var(--s-dig);background:var(--card);border:2px solid var(--line);border-radius:24px;padding:14px 16px;margin-bottom:10px}
+.sub header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.sub h3{font-size:18px;font-weight:600;display:flex;align-items:center;gap:9px}
+.sub h3::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c)}
+.sub .nums{display:flex;gap:16px;font-size:13px;color:var(--mut);font-weight:800;margin-bottom:8px;flex-wrap:wrap}
+.sub .nums b{color:var(--ink)}
+.sub .bar{margin:0}.sub .bar i{background:var(--c)}
+
+/* erteleme + rapor */
+.pc{display:inline-block;margin-top:3px;font:800 12px var(--f-b);font-style:normal;color:var(--red)}
+.late{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;padding:12px 14px;border-radius:20px;background:var(--soft);border:2px solid var(--pink)}
+.late b{display:block;font:600 16px var(--f-d);color:var(--red)}.late small{color:var(--mut);font-weight:700;font-size:12.5px}
+.rep .hero{display:flex;align-items:center;gap:18px;background:var(--card);border:2px solid var(--line);border-radius:26px;padding:16px;margin-bottom:10px}
+.dn{width:92px;height:92px;flex:none}.dn::before{inset:9px}.dn b{font-size:22px}
+.hero h3{font-size:19px;font-weight:600}.hero p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.stg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.st{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:12px 8px;text-align:center}
+.st b{display:block;font:600 26px/1.1 var(--f-d);color:var(--red)}.st span{font-size:12.5px;color:var(--mut);font-weight:800}
+.cc{background:var(--card);border:2px solid var(--line);border-radius:26px;padding:14px 14px 12px;margin-bottom:10px}
+.cc h3{font-size:17px;font-weight:600;margin-bottom:8px}
+.cc svg{width:100%;height:auto}
+.lg{display:flex;gap:14px;font-size:12.5px;color:var(--mut);font-weight:800;margin-top:4px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;background:var(--line)}.lg i.r{background:var(--red)}
+.rw{--c:var(--s-dig);display:grid;grid-template-columns:104px minmax(0,1fr) 44px;align-items:center;gap:10px;margin:8px 0;font-size:13.5px;font-weight:800}
+.rw span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rw b{text-align:right;color:var(--mut)}
+.rw .bar{margin:0}.rw .bar i{background:var(--c)}
+/* alt bar */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;pointer-events:none;
+  padding:0 max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px))}
+.dock div{pointer-events:auto;display:flex;gap:4px;padding:6px;border-radius:999px;background:var(--card);border:2px solid var(--line);box-shadow:var(--shadow)}
+.dock button{border:0;background:transparent;padding:11px 22px;border-radius:999px;font:600 15.5px var(--f-d);color:var(--mut)}
+.dock button[aria-selected="true"]{background:var(--red);color:var(--on-red)}
+
+/* alttan açılan pencere */
+.ov{position:fixed;inset:0;z-index:40;background:rgba(77,42,58,.45);display:flex;align-items:flex-end;justify-content:center}
+.ov[hidden]{display:none}
+.sheet{width:100%;max-width:720px;max-height:88%;display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-bottom:0;border-radius:30px 30px 0 0;
+  padding:18px max(16px,env(safe-area-inset-left,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px))}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sh h2{font-size:22px;font-weight:600;color:var(--red)}
+.lbl{font-size:13px;font-weight:800;color:var(--mut);margin:10px 2px 6px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{--c:var(--s-dig);border:2px solid var(--line);background:var(--soft);border-radius:999px;padding:7px 13px;font-size:14px;font-weight:800}
+.chip[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.dchip{min-width:52px;text-align:center;padding:7px 10px;line-height:1.15}
+.dchip small{display:block;font-size:11px;opacity:.85}
+.dchip[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:var(--on-red)}
+input[type=search],input[type=text],input[type=date]{width:100%;font:700 16px var(--f-b);color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:16px;padding:11px 14px}
+.list{overflow-y:auto;margin-top:10px;display:grid;gap:6px;min-height:80px;padding-bottom:4px;overscroll-behavior:contain}
+.topic{--c:var(--s-dig);display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;width:100%;border:2px solid var(--line);background:transparent;border-radius:16px;padding:10px 14px;font-weight:700}
+.topic:active{background:var(--soft)}
+.topic em{font-style:normal;font-size:12px;font-weight:800;color:var(--s-bio);white-space:nowrap}
+.topic span{min-width:0;overflow-wrap:anywhere}
+.row2{display:flex;gap:8px;margin-top:10px}
+.row2 .go{flex:none}
+.go{border:0;border-radius:999px;padding:11px 20px;font:600 16px var(--f-d);color:var(--on-red);background:var(--red)}
+.go.ghost{background:var(--soft);color:var(--ink);border:2px solid var(--line)}
+.hint{color:var(--mut);font-size:13px;margin:8px 2px 0}
+
+#toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translate(-50%,14px);z-index:60;background:var(--red);color:var(--on-red);padding:11px 20px;border-radius:999px;font:600 15px var(--f-d);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;max-width:calc(100% - 32px);text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.hearts{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.hearts svg{position:absolute;bottom:-30px;width:var(--s);height:var(--s);fill:var(--pink);opacity:.9;animation:up 2.4s var(--d) ease-out forwards}
+@keyframes up{to{transform:translate(var(--x),-105vh) rotate(var(--r));opacity:0}}
+@media (max-width:420px){.dock button{padding:11px 16px}.task{gap:10px;padding:11px 10px 11px 12px}.tb{flex-direction:column;align-items:flex-end;gap:4px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <svg class="bow" viewBox="0 0 64 40" aria-hidden="true"><path d="M32 20C21 3 3 5 3 20c0 15 18 17 29 0Z" fill="var(--red)"/><path d="M32 20C43 3 61 5 61 20c0 15-18 17-29 0Z" fill="var(--red)"/><path d="M14 13c4-3 9-3 13 2" stroke="#fff" stroke-opacity=".45" stroke-width="2.4" stroke-linecap="round" fill="none"/><path d="M50 13c-4-3-9-3-13 2" stroke="#fff" stroke-opacity=".45" stroke-width="2.4" stroke-linecap="round" fill="none"/><circle cx="32" cy="20" r="7" fill="var(--pink)"/><circle cx="30" cy="18" r="2" fill="#fff" fill-opacity=".6"/></svg>
+    <div>
+      <h1>Çalışma Planım</h1>
+      <p>Merhaba <input class="nm" id="nm" type="text" maxlength="16" placeholder="adın?" aria-label="Adın"> bugün neler yapıyoruz?</p>
+    </div>
+  </div>
+  <div class="note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.4l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.6L12 21.4z"/></svg><span>İyi çalışmalar bebeğim</span></div>
+  <main>
+    <section id="v0"></section>
+    <section id="v1" hidden></section>
+    <section id="v2" hidden></section>
+    <section id="v3" class="rep" hidden></section>
+  </main>
+</div>
+<nav class="dock" aria-label="Bölümler"><div role="tablist">
+  <button role="tab" data-tab="0" aria-selected="true">Gün</button>
+  <button role="tab" data-tab="1" aria-selected="false">Hafta</button>
+  <button role="tab" data-tab="2" aria-selected="false">Dersler</button>
+  <button role="tab" data-tab="3" aria-selected="false">Rapor</button>
+</div></nav>
+<div id="ov" class="ov" hidden></div>
+<div id="toast" role="status"></div>
+<div id="fx" class="hearts" aria-hidden="true"></div>
+
+<script>
+/* ---------- Konu havuzu (TYT müfredatı) ---------- */
+const B=x=>x+" Bölüm Bitirme Testi",E=x=>x+" Efişinado Testi";
+const T=n=>[n+" 1",n+" 2",B(n),E(n)];
+const M0=[["Sayı Kümeleri","Pozitif ve Negatif Sayılar"],["En Büyük ve En Küçük Değer 1","En Büyük ve En Küçük Değer 2"],["Tek ve Çift Sayılar 1","Tek ve Çift Sayılar 2"],["Ardışık Sayılar","Ardışık Sayı Örüntüleri"],["Asal Sayılar","Faktöriyel"],T("Sayı Basamakları"),["Rasyonel Sayılar 1","Rasyonel Sayılar 2"],["Ondalık Sayılar 1","Ondalık Sayılar 2"],["Bölme","Bölünebilme"],T("EBOB EKOK"),["I ve II Bilinmeyenli Denklemler 1","I ve II Bilinmeyenli Denklemler 2"],T("Basit Eşitsizlikler"),T("Mutlak Değer"),T("Üslü Sayılar"),T("Köklü Sayılar"),T("Çarpanlara Ayırma"),T("Oran Orantı"),["Sayı Problemleri 1","Sayı Problemleri 2"],["Sayı Problemleri 3","Sayı Problemleri 4"],["Kesir Problemleri 1","Kesir Problemleri 2"],["Yaş Problemleri 1","Yaş Problemleri 2"],["Yüzde Problemleri 1","Yüzde Problemleri 2"],["Kâr Zarar Problemleri 1","Kâr Zarar Problemleri 2"],["Karışım Problemleri 1","Karışım Problemleri 2"],["Hareket Problemleri 1","Hareket Problemleri 2"],["İşçi Problemleri 1","İşçi Problemleri 2"],["Grafik Analizi","Veri Analizi (İstatistik)"],["Mantık 1","Mantık 2"],["Kümeler 1","Kümeler 2"],["Kümeler 3","Kartezyen Çarpım"],["Küme Problemleri 1","Küme Problemleri 2"],["Fonksiyonlar 1","Fonksiyonlar 2"],["Fonksiyonlar 3","Fonksiyonlar 4"],["Fonksiyonlar 5","Fonksiyonlar 6"],["Fonksiyonlar 7","Fonksiyonlar 8"],["Permütasyon 1","Permütasyon 2"],["Kombinasyon 1","Kombinasyon 2"],["Binom Açılımı 1","Binom Açılımı 2"],["Olasılık 1","Olasılık 2"]];
+const G='Doğruda Açılar - 1/Doğruda Açılar - 2|Üçgen Açılar - 1/Üçgen Açılar - 2|Üçgen Açılar - 3/Üçgen Açılar - 4|Dik Üçgen - 1/Dik Üçgen - 2|Dik Üçgen - 3/Dik Üçgen - 4|İkizkenar Üçgen - 1/İkizkenar Üçgen - 2|Eşkenar Üçgen - 1/Eşkenar Üçgen - 2|Açıortay - 1/Açıortay - 2|Açıortay - 3/Kenarortay - 1|Üçgende Eşlik/Üçgende Benzerlik - 1|Üçgende Benzerlik - 2/Üçgende Benzerlik - 3|Üçgende Alan - 1/Üçgende Alan - 2|Üçgende Alan - 3/Üçgende Alan - 4|Açı-Kenar Bağıntıları - 1/Açı-Kenar Bağıntıları - 2|Çokgenler - 1/Çokgenler - 2|Dörtgenler - 1/Dörtgenler - 2|Yamuk - 1/Yamuk - 2|Yamuk - 3 (İkizkenar Yamuk)/Yamuk - 4 (Dik Yamuk)|Paralelkenar - 1/Paralelkenar - 2|Paralelkenar - 3/Paralelkenar - 4|Eşkenar Dörtgen - 1/Eşkenar Dörtgen - 2|Deltoid - 1/Deltoid - 2|Dikdörtgen - 1/Dikdörtgen - 2|Dikdörtgen - 3/Dikdörtgen - 4|Kare - 1/Kare - 2|Kare - 3/Kare - 4|Çemberde Açı - 1/Çemberde Açı - 2|Çemberde Açı - 3/Çemberde Açı - 4|Çemberde Uzunluk - 1/Çemberde Uzunluk - 2|Çemberde Uzunluk - 3/Çemberde Uzunluk - 4|Dairede Çevre ve Alan - 1/Dairede Çevre ve Alan - 2|Dairede Çevre ve Alan - 3/Dairede Çevre ve Alan - 4|Prizmalar - 1/Prizmalar - 2|Silindir - 1/Silindir - 2|Piramit - 1/Piramit - 2|Koni - 1/Koni - 2|Küre - 1/Küre - 2|Noktanın Analitiği - 1/Noktanın Analitiği - 2|Noktanın Analitiği - 3/Noktanın Analitiği - 4|Doğrunun Analitiği - 1/Doğrunun Analitiği - 2|Doğrunun Analitiği - 3/Doğrunun Analitiği - 4|Doğrunun Analitiği - 5/Doğrunun Analitiği - 6|Doğrunun Analitiği - 7/Doğrunun Analitiği - 8|Doğrunun Analitiği - 9/Doğrunun Analitiği - 10|Dönüşüm Geometrisi - 1/Dönüşüm Geometrisi - 2|Dönüşüm Geometrisi - 3/Dönüşüm Geometrisi - 4|Dönüşüm Geometrisi - 5/Dönüşüm Geometrisi - 6|Çember Analitiği - 1/Çember Analitiği - 2|Çember Analitiği - 3/Çember Analitiği - 4|Çember Analitiği - 5/Çember Analitiği - 6'.split(/[|/]/);
+const BIO=["Canlıların Ortak Özellikleri","İnorganik Maddeler - Canlıların Temel Bileşenleri","Karbohidratlar","Lipitler","Proteinler","Enzimler","Nükleik Asitler","Vitaminler - ATP","Hücre Zarı - Hücre Çeperi","Çekirdek ve Organeller - Sitoplazma","Hücre Karşılaştırmaları - Sitoplazma","Hücre Zarından Madde Geçişleri 1","Hücre Zarından Madde Geçişleri 2","Bilimsel Bilgi ve Özelleşme","Canlıların Sınıflandırılması","Bakteriler Alemi ve Arkeler Alemi","Protista, Bitkiler ve Mantarlar Alemi","Omurgasız Canlılar - Hayvanlar Alemi","Omurgalı Canlılar 1","Omurgalı Canlılar 2","Virüsler","Mitoz Bölünme","Mayoz Bölünme","Eşeysiz Üreme","Eşeyli Üreme","Gregor Mendel ve Terimler - Kalıtım","Monohibrit ve Dihibrit Çaprazlama - Kalıtım","Eş Baskınlık, Çok Allelik, Kan Grupları - Kalıtım","Eşeye Bağlı Kalıtım","Soyağaçları - Kalıtım","Mutasyon, Modifikasyon, Adaptasyon - Kalıtım","Ekosistem Ekolojisi","Madde ve Enerji Akışı","Madde Döngüleri","Çevre Kirliliği ve Sürdürülebilirlik"];
+const FIZ=["Fizik Bilimine Giriş","Madde ve Özellikleri","Hareket ve Kuvvet","Enerji","Isı, Sıcaklık ve Genleşme","Elektrostatik","Elektrik Akımı ve Devreleri","Mıknatıslar ve Manyetizma","Basınç","Kaldırma Kuvveti","Dalgalara Giriş ve Yay Dalgaları","Su, Ses ve Deprem Dalgaları","Aydınlanma ve Gölge","Yansıma ve Düzlem Ayna","Küresel Aynalar","Işığın Kırılması","Mercekler","Prizmalar ve Renk"];
+const KIM=["Kimya Bilimi","Atomun Yapısı","Periyodik Sistem","Kimyasal Türler Arası Etkileşimler (1)","Kimyasal Türler Arası Etkileşimler (2)","Maddenin Halleri","Karışımlar","Asitler-Bazlar-Tuzlar","Temel Kimya Kanunları","Mol Kavramı","Kimyasal Hesaplamalar","Doğa ve Kimya - Kimya Her Yerde"];
+const COG=["Doğa ve İnsan","Bölgeler","İklim Bilgisi","Nüfus","Afetler","İç Kuvvetler","Dış Kuvvetler","Türkiye'nin Yer Şekilleri","Su - Toprak - Bitki","Yerleşme - Ekonomi - Göç","Ulaşım","Coğrafi Konum - Harita Bilgisi"];
+const TRK=["Sözcükte Anlam","Cümlede Anlam","Ses Bilgisi","Yazım Kuralları","Noktalama İşaretleri","Sözcükte Yapı (Kök - Ek)","İsimler","Sıfatlar","Zamirler","Zarflar","Edat - Bağlaç - Ünlem","Fiiller (Kip - Kişi - Ek Fiil)","Fiilimsiler","Fiilde Çatı","Cümlenin Ögeleri","Cümle Türleri","Anlatım Bozukluğu","Anlatım Biçimleri - Düşünceyi Geliştirme Yolları","Sözel Mantık"];
+const TAR=["Tarih ve Zaman","İnsanlığın İlk Dönemleri","Orta Çağ'da Dünya","İlk ve Orta Çağlarda Türk Dünyası","İslam Medeniyetinin Doğuşu","Türklerin İslamiyet'i Kabulü ve İlk Türk-İslam Devletleri","Selçuklu Türkiyesi","Beylikten Devlete Osmanlı","Dünya Gücü Osmanlı","Osmanlı Merkez Teşkilatı ve Toplum Düzeni","Değişen Dünya Dengeleri Karşısında Osmanlı","Değişim Çağında Avrupa ve Osmanlı","Devrimler Çağında Değişen Devlet-Toplum İlişkileri","XX. Yüzyıl Başlarında Osmanlı ve Dünya","Milli Mücadele","Atatürkçülük ve Türk İnkılabı","İki Savaş Arasında Türkiye ve Dünya","II. Dünya Savaşı ve Soğuk Savaş Dönemi","Küreselleşen Dünya"];
+const FEL=["Felsefeye Giriş","Bilgi Felsefesi","Varlık Felsefesi","Ahlak Felsefesi","Sanat Felsefesi","Din Felsefesi","Siyaset Felsefesi","Bilim Felsefesi"];
+const DIN=["Bilgi ve İnanç","Din ve İslam","İslam ve İbadet","Gençlik ve Değerler","Allah - İnsan İlişkisi","Hz. Muhammed'in Hayatı","Vahiy ve Akıl","Ahlaki Tutum ve Davranışlar","İslam Düşüncesinde Yorumlar","Din, Kültür ve Medeniyet"];
+const AMAT=["Fonksiyonlar - Bileşke ve Ters Fonksiyon","Polinomlar","İkinci Dereceden Denklemler","Karmaşık Sayılar","Parabol","Eşitsizlikler ve Mutlak Değer","Üstel Fonksiyonlar","Logaritma","Diziler","Trigonometri - Birim Çember","Trigonometrik Fonksiyonlar","Toplam-Fark ve İki Kat Açı Formülleri","Trigonometrik Denklemler","Limit","Süreklilik","Türev","Türev Uygulamaları (Max-Min, Grafik)","İntegral","Belirli İntegral ve Alan","Permütasyon - Kombinasyon - Olasılık Tekrarı"];
+const AFIZ=["Vektörler","Bağıl Hareket","Newton'un Hareket Yasaları","Bir Boyutta Sabit İvmeli Hareket","İki Boyutta Hareket - Atışlar","İş, Güç ve Enerji","İtme ve Momentum","Tork ve Denge","Kütle Merkezi","Basit Makineler","Elektriksel Kuvvet ve Alan","Elektriksel Potansiyel","Düzgün Elektrik Alan ve Sığa","Manyetizma","Elektromanyetik İndüksiyon","Alternatif Akım ve Transformatörler","Düzgün Çembersel Hareket","Dönme, Yuvarlanma ve Açısal Momentum","Kütle Çekim ve Kepler Yasaları","Basit Harmonik Hareket","Dalga Mekaniği","Atom Fiziğine Giriş ve Radyoaktivite","Modern Fizik"];
+const AKIM=["Modern Atom Teorisi","Periyodik Sistem ve Elektron Dizilimleri","Gazlar","Sıvı Çözeltiler ve Çözünürlük","Kimyasal Tepkimelerde Enerji","Kimyasal Tepkimelerde Hız","Kimyasal Tepkimelerde Denge","Asit-Baz Dengesi","Çözünürlük Dengesi","Kimya ve Elektrik","Karbon Kimyasına Giriş","Organik Bileşikler","Enerji Kaynakları ve Bilimsel Gelişmeler"];
+const ABIO=["Sinir Sistemi","Endokrin Sistem ve Hormonlar","Duyu Organları","Destek ve Hareket Sistemi","Sindirim Sistemi","Dolaşım ve Bağışıklık Sistemi","Solunum Sistemi","Boşaltım Sistemi","Üreme Sistemi ve Embriyonik Gelişim","Komünite ve Popülasyon Ekolojisi","Genden Proteine (DNA, RNA, Protein Sentezi)","Genetik Mühendisliği ve Biyoteknoloji","Fotosentez ve Kemosentez","Hücresel Solunum","Bitki Biyolojisi","Canlılar ve Çevre"];
+const uniq=a=>[...new Set(a)];
+const SUBJ={
+  MAT:{n:"Matematik",v:"--s-mat",pool:uniq(M0.flat().filter(x=>!/Testi/.test(x)))},
+  GEO:{n:"Geometri",v:"--s-geo",pool:uniq(G)},
+  BIO:{n:"Biyoloji",v:"--s-bio",pool:BIO},
+  FIZ:{n:"Fizik",v:"--s-fiz",pool:FIZ},
+  KIM:{n:"Kimya",v:"--s-kim",pool:KIM},
+  TAR:{n:"Tarih",v:"--s-tar",pool:TAR},
+  COG:{n:"Coğrafya",v:"--s-cog",pool:COG},
+  FEL:{n:"Felsefe",v:"--s-fel",pool:FEL},
+  DIN:{n:"Din Kültürü",v:"--s-din",pool:DIN},
+  TRK:{n:"Türkçe",v:"--s-trk",pool:TRK},
+  AMAT:{n:"AYT Matematik",v:"--s-amat",pool:AMAT},
+  AFIZ:{n:"AYT Fizik",v:"--s-afiz",pool:AFIZ},
+  AKIM:{n:"AYT Kimya",v:"--s-akim",pool:AKIM},
+  ABIO:{n:"AYT Biyoloji",v:"--s-abio",pool:ABIO},
+  PAR:{n:"Paragraf",v:"--s-par",pool:["40 paragraf","20 paragraf","Deneme paragrafları"]},
+  DIG:{n:"Diğer",v:"--s-dig",pool:[]}
+};
+const SK=Object.keys(SUBJ);
+
+/* ---------- Tarih yardımcıları ---------- */
+const GUN=["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],GK=["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"],
+AY=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const pad=n=>String(n).padStart(2,"0");
+const key=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const parse=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)};
+const addD=(k,n)=>{const d=parse(k);d.setDate(d.getDate()+n);return key(d)};
+const monday=k=>{const d=parse(k),w=(d.getDay()+6)%7;d.setDate(d.getDate()-w);return key(d)};
+const TODAY=key(new Date());
+const weekOf=k=>Array.from({length:7},(_,i)=>addD(monday(k),i));
+const long=k=>{const d=parse(k);return `${GUN[d.getDay()]}, ${d.getDate()} ${AY[d.getMonth()]}`};
+
+/* ---------- Durum ---------- */
+let S={tasks:[],name:""};
+try{const r=JSON.parse(localStorage.getItem("pembe-plan")||"null");if(r&&Array.isArray(r.tasks))S=r}catch(e){}
+/* Veritabanı eşitleme: localStorage hızlı önbellek, asıl kayıt MongoDB'de (/api/plan) */
+let synced=false,saveT=null,failShown=false;
+function push(){
+  fetch("/api/plan",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(S),keepalive:true})
+    .then(r=>{if(!r.ok)throw 0;failShown=false})
+    .catch(()=>{if(!failShown){failShown=true;toast("Kaydedilemedi, internetini kontrol et")}});
+}
+const save=()=>{
+  try{localStorage.setItem("pembe-plan",JSON.stringify(S))}catch(e){}
+  if(!synced)return;
+  clearTimeout(saveT);saveT=setTimeout(push,400);
+};
+window.addEventListener("pagehide",()=>{if(saveT){clearTimeout(saveT);saveT=null;push()}});
+async function pull(){
+  try{
+    const r=await fetch("/api/plan",{cache:"no-store"});
+    if(!r.ok)throw 0;
+    const d=await r.json();
+    if(d&&Array.isArray(d.tasks)){S={tasks:d.tasks,name:d.name||S.name||"Azra"};try{localStorage.setItem("pembe-plan",JSON.stringify(S))}catch(e){}}
+    else if(S.tasks.length){push()}   /* sunucu boşsa eldekini yukarı taşı */
+    synced=true;$("nm").value=S.name;paint();
+  }catch(e){
+    synced=true;   /* sunucuya ulaşılamadıysa yerel çalış, değişiklikler yine denenir */
+    toast("Veritabanına bağlanılamadı");
+  }
+}
+let tab=0,sel=TODAY,wk=monday(TODAY),addState=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const dayTasks=k=>S.tasks.filter(t=>t.date===k);
+const pct=a=>a.length?Math.round(100*a.filter(t=>t.done).length/a.length):0;
+const HEART='<svg viewBox="0 0 24 24"><path d="M12 21.4l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.6L12 21.4z"/></svg>';
+const CHECK='<svg viewBox="0 0 24 24"><path d="M9.2 17.6 4.4 12.8l2-2 2.8 2.8 8.4-8.4 2 2z"/></svg>';
+const BOWSM='<svg viewBox="0 0 64 40" aria-hidden="true"><path d="M32 20C21 3 3 5 3 20c0 15 18 17 29 0Z" fill="var(--red)"/><path d="M32 20C43 3 61 5 61 20c0 15-18 17-29 0Z" fill="var(--red)"/><circle cx="32" cy="20" r="7" fill="var(--pink)"/></svg>';
+
+/* ---------- Görünümler ---------- */
+function viewDay(){
+  const tasks=dayTasks(sel),p=pct(tasks),done=tasks.filter(t=>t.done).length;
+  const wd=weekOf(wk);
+  const [a,b]=[parse(wd[0]),parse(wd[6])];
+  const range=a.getMonth()===b.getMonth()?`${a.getDate()} – ${b.getDate()} ${AY[b.getMonth()]}`:`${a.getDate()} ${AY[a.getMonth()].slice(0,3)} – ${b.getDate()} ${AY[b.getMonth()].slice(0,3)}`;
+  let h=`<div class="wk"><div class="wkh"><button class="ib" data-act="wk" data-n="-7" aria-label="Önceki hafta">‹</button><b>${range}</b><div style="display:flex;gap:6px;align-items:center">${wd.includes(TODAY)?"":`<button class="pill" data-act="now">Bugün</button>`}<button class="ib" data-act="wk" data-n="7" aria-label="Sonraki hafta">›</button></div></div><div class="days">`;
+  wd.forEach(k=>{const t=dayTasks(k),d=parse(k);h+=`<button class="d${k===sel?" on":""}${k===TODAY?" now":""}" data-act="sel" data-k="${k}" aria-label="${long(k)}"><small>${GK[d.getDay()]}</small><span class="ring" style="--p:${pct(t)}"><b>${d.getDate()}</b></span><span class="n">${t.length?t.length+" ders":""}</span></button>`});
+  h+=`</div></div><div class="panel"><div class="ph"><h2>${long(sel)}</h2><span>${tasks.length?done+"/"+tasks.length+" tamam":""}</span></div>`;
+  if(tasks.length)h+=`<div class="bar"><i style="--p:${p}%"></i></div>`;
+  const late=sel===TODAY?S.tasks.filter(t=>!t.done&&t.date<TODAY):[];
+  if(late.length)h+=`<div class="late"><div><b>${late.length} ders geride kaldı</b><small>Önceki günlerden tamamlanmayanlar</small></div><button class="sm" data-act="pull">Bugüne al</button></div>`;
+  if(!tasks.length)h+=`<div class="empty">${BOWSM}<b>Bu güne henüz ders eklemedin</b>Aşağıdaki butonla bugün çalışacağın konuları seç.</div>`;
+  tasks.forEach(t=>{const s=SUBJ[t.sub]||SUBJ.DIG;h+=`<div class="task${t.done?" done":""}" style="--c:var(${s.v})"><label class="ck"><input type="checkbox" data-act="tog" data-id="${t.id}"${t.done?" checked":""} aria-label="${esc(t.title)} tamamlandı"><span class="box">${CHECK}</span></label><div class="tx"><small>${s.n}</small><b>${esc(t.title)}</b>${t.pc?`<i class="pc">↻ ${t.pc} kez ertelendi</i>`:""}</div><div class="tb">${t.done?"":`<button class="sm" data-act="push" data-id="${t.id}">Yarına</button>`}<button class="sm" data-act="mv" data-id="${t.id}">Taşı</button><button class="sm x" data-act="del" data-id="${t.id}" aria-label="Sil">Sil</button></div></div>`});
+  h+=`<button class="add" data-act="add">+ Ders ekle</button></div>`;
+  return h;
+}
+function viewWeek(){
+  const wd=weekOf(wk),a=parse(wd[0]),b=parse(wd[6]);
+  let h=`<div class="wk"><div class="wkh"><button class="ib" data-act="wk" data-n="-7" aria-label="Önceki hafta">‹</button><b>${a.getDate()} ${AY[a.getMonth()]} – ${b.getDate()} ${AY[b.getMonth()]}</b><button class="ib" data-act="wk" data-n="7" aria-label="Sonraki hafta">›</button></div></div><div style="height:12px"></div>`;
+  wd.forEach(k=>{const t=dayTasks(k);h+=`<div class="wd${k===TODAY?" now":""}"><header><h3>${long(k)}</h3><span>${t.length?t.filter(x=>x.done).length+"/"+t.length:""}</span></header>${t.length?`<ul>${t.map(x=>`<li class="${x.done?"done":""}" style="--c:var(${(SUBJ[x.sub]||SUBJ.DIG).v})"><span>${esc(x.title)}</span></li>`).join("")}</ul>`:`<p>Boş gün</p>`}<button class="sm go-day" data-act="goday" data-k="${k}" style="margin-top:8px">Bu günü aç</button></div>`});
+  return h;
+}
+function viewSubjects(){
+  let h=`<div class="ph"><h2>Derslerim</h2><span>${S.tasks.filter(t=>t.done).length}/${S.tasks.length} tamam</span></div>`;
+  SK.forEach(k=>{const s=SUBJ[k],all=S.tasks.filter(t=>t.sub===k),dn=all.filter(t=>t.done).length,tot=s.pool.length,pl=uniq(all.map(t=>t.title)).filter(x=>s.pool.includes(x)).length;
+    h+=`<div class="sub" style="--c:var(${s.v})"><header><h3>${s.n}</h3><button class="sm" data-act="addsub" data-s="${k}">Planla</button></header><div class="nums"><span>Planlanan <b>${all.length}</b></span><span>Biten <b>${dn}</b></span>${tot?`<span>Konu havuzu <b>${pl}/${tot}</b></span>`:""}</div><div class="bar"><i style="--p:${all.length?Math.round(100*dn/all.length):0}%"></i></div></div>`});
+  return h;
+}
+function streak(){let n=0,k=TODAY;const ok=x=>{const t=dayTasks(x);return t.length&&t.every(v=>v.done)};if(!ok(k))k=addD(k,-1);while(ok(k)){n++;k=addD(k,-1)}return n}
+function viewReport(){
+  const all=S.tasks,dn=all.filter(t=>t.done).length,P=pct(all),late=all.filter(t=>!t.done&&t.date<TODAY).length,pp=all.reduce((a,t)=>a+(t.pc||0),0);
+  const wd=weekOf(wk),a=parse(wd[0]),b=parse(wd[6]),data=wd.map(k=>{const t=dayTasks(k);return{k,p:t.length,d:t.filter(x=>x.done).length}}),mx=Math.max(1,...data.map(x=>x.p));
+  const bars=data.map((x,i)=>{const gx=i*44+10,hp=Math.round(88*x.p/mx),hd=Math.round(88*x.d/mx);return `<rect x="${gx}" y="${112-hp}" width="34" height="${hp}" rx="8" fill="var(--line)"/><rect x="${gx}" y="${112-hd}" width="34" height="${hd}" rx="8" fill="var(--red)"/><text x="${gx+17}" y="130" text-anchor="middle" font-size="12" font-weight="800" fill="var(--mut)">${GK[parse(x.k).getDay()]}</text>${x.p?`<text x="${gx+17}" y="${107-hp}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">${x.d}/${x.p}</text>`:""}`}).join("");
+  const rows=SK.map(k=>{const t=all.filter(x=>x.sub===k);if(!t.length)return"";const d=t.filter(x=>x.done).length;return `<div class="rw" style="--c:var(${SUBJ[k].v})"><span>${SUBJ[k].n}</span><div class="bar"><i style="--p:${Math.round(100*d/t.length)}%"></i></div><b>${d}/${t.length}</b></div>`}).join("");
+  return `<div class="ph"><h2>Rapor</h2></div>
+  <div class="hero"><span class="ring dn" style="--p:${P}"><b>%${P}</b></span><div><h3>${dn}/${all.length} ders tamam</h3><p>${streak()?`${streak()} gündür planını bitiriyorsun`:"Bugünkü planı bitirince seri başlar"}</p></div></div>
+  <div class="stg"><div class="st"><b>${all.length}</b><span>Planlanan</span></div><div class="st"><b>${late}</b><span>Geciken</span></div><div class="st"><b>${pp}</b><span>Erteleme</span></div></div>
+  <div class="cc"><div class="wkh"><button class="ib" data-act="wk" data-n="-7" aria-label="Önceki hafta">‹</button><b>${a.getDate()} ${AY[a.getMonth()]} – ${b.getDate()} ${AY[b.getMonth()]}</b><button class="ib" data-act="wk" data-n="7" aria-label="Sonraki hafta">›</button></div><svg viewBox="0 0 318 138" role="img" aria-label="Haftalık planlanan ve biten ders sayısı">${bars}</svg><div class="lg"><span><i></i>Planlanan</span><span><i class="r"></i>Biten</span></div></div>
+  <div class="cc"><h3>Derslere göre ilerleme</h3>${rows||`<p class="hint">Ders ekledikçe burada görünecek.</p>`}</div>`;
+}
+function paint(){
+  $("v0").innerHTML=viewDay();$("v1").innerHTML=viewWeek();$("v2").innerHTML=viewSubjects();$("v3").innerHTML=viewReport();
+  [0,1,2,3].forEach(i=>$("v"+i).hidden=i!==tab);
+  document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",+b.dataset.tab===tab));
+}
+
+/* ---------- Pencereler ---------- */
+function closeOv(){const o=$("ov");o.hidden=true;o.innerHTML="";addState=null}
+function openOv(html){const o=$("ov");o.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;o.hidden=false}
+function openAdd(sub){
+  addState={sub:sub||"MAT",q:"",days:new Set([sel])};
+  const wd=weekOf(wk);
+  openOv(`<div class="sh"><h2>Ders ekle</h2><button class="sm" data-act="close">Kapat</button></div>
+  <div class="lbl">Hangi günlere?</div><div class="chips" id="adays">${wd.map(k=>`<button class="chip dchip" data-act="aday" data-k="${k}" aria-pressed="${addState.days.has(k)}">${GK[parse(k).getDay()]}<small>${parse(k).getDate()}</small></button>`).join("")}</div>
+  <div class="lbl">Ders</div><div class="chips" id="asubs">${SK.map(k=>`<button class="chip" data-act="asub" data-s="${k}" style="--c:var(${SUBJ[k].v})" aria-pressed="${k===addState.sub}">${SUBJ[k].n}</button>`).join("")}</div>
+  <div class="lbl">Konu seç ya da kendin yaz</div>
+  <input type="search" id="aq" placeholder="Konu ara" aria-label="Konu ara" autocomplete="off">
+  <div class="list" id="alist"></div>
+  <div class="row2"><input type="text" id="acustom" placeholder="Kendi konunu yaz" maxlength="80" aria-label="Kendi konun"><button class="go" data-act="acustom">Ekle</button></div>
+  <p class="hint" id="ahint">Konuya dokununca seçili günlere eklenir. Pencere açık kalır, art arda ekleyebilirsin.</p>`);
+  refreshChips();refreshList();
+}
+function refreshChips(){
+  document.querySelectorAll("#asubs .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.s===addState.sub));
+  document.querySelectorAll("#adays .chip").forEach(c=>c.setAttribute("aria-pressed",addState.days.has(c.dataset.k)));
+}
+function refreshList(){
+  const s=SUBJ[addState.sub],q=addState.q.toLocaleLowerCase("tr"),planned=new Set(S.tasks.filter(t=>t.sub===addState.sub).map(t=>t.title));
+  const items=s.pool.filter(x=>x.toLocaleLowerCase("tr").includes(q));
+  $("alist").innerHTML=items.length?items.map(x=>`<button class="topic" data-act="atopic" data-t="${esc(x)}"><span>${esc(x)}</span>${planned.has(x)?"<em>planlandı</em>":""}</button>`).join(""):`<p class="hint">${s.pool.length?"Eşleşen konu yok. Aşağıya kendi konunu yazabilirsin.":"Bu ders için hazır konu yok. Aşağıya yazarak ekle."}</p>`;
+}
+function addTasks(sub,title){
+  if(!addState.days.size){toast("Önce en az bir gün seç");return}
+  [...addState.days].sort().forEach(k=>S.tasks.push({id:uid(),date:k,sub,title,done:false}));
+  save();paint();toast(`${addState.days.size>1?addState.days.size+" güne":"Güne"} eklendi`);
+}
+function openMove(id){
+  const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  const wd=weekOf(wk);
+  openOv(`<div class="sh"><h2>Başka güne taşı</h2><button class="sm" data-act="close">Kapat</button></div>
+  <p class="hint" style="margin:0 2px 8px">${esc(t.title)}</p>
+  <div class="lbl">Bu haftadan seç</div><div class="chips">${wd.map(k=>`<button class="chip dchip" data-act="moveto" data-id="${id}" data-k="${k}" aria-pressed="${k===t.date}">${GK[parse(k).getDay()]}<small>${parse(k).getDate()}</small></button>`).join("")}</div>
+  <div class="lbl">Ya da tarih seç</div>
+  <div class="row2"><input type="date" id="mdate" value="${t.date}" aria-label="Tarih"><button class="go" data-act="movedate" data-id="${id}">Taşı</button></div>`);
+}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function hearts(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const f=$("fx");let s="";
+  for(let i=0;i<18;i++)s+=HEART.replace("<svg",`<svg style="left:${Math.random()*100}%;--s:${14+Math.random()*22}px;--d:${(Math.random()*.6).toFixed(2)}s;--x:${Math.round(Math.random()*120-60)}px;--r:${Math.round(Math.random()*60-30)}deg"`);
+  f.innerHTML=s;setTimeout(()=>f.innerHTML="",3200);
+}
+
+/* ---------- Olaylar ---------- */
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.act==="tog"){
+    const x=S.tasks.find(v=>v.id===t.dataset.id);if(!x)return;
+    const before=dayTasks(x.date).length&&dayTasks(x.date).every(v=>v.done);
+    x.done=t.checked;save();paint();
+    const after=dayTasks(x.date).every(v=>v.done);
+    if(!before&&after&&dayTasks(x.date).length){hearts();toast("Günü bitirdin, çok güzel!")}
+  }
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="aq"&&addState){addState.q=e.target.value;refreshList()}
+  if(e.target.id==="nm"){S.name=e.target.value;save()}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!$("ov").hidden)closeOv();
+  if(e.key==="Enter"&&e.target.id==="acustom"){e.preventDefault();const v=e.target.value.trim();if(v&&addState){addTasks(addState.sub,v);e.target.value=""}}
+});
+document.addEventListener("click",e=>{
+  if(e.target===$("ov")){closeOv();return}
+  const tb=e.target.closest("[data-tab]");if(tb){tab=+tb.dataset.tab;paint();window.scrollTo(0,0);return}
+  const b=e.target.closest("[data-act]");if(!b||b.tagName==="INPUT")return;
+  const d=b.dataset,a=d.act;
+  if(a==="sel"){sel=d.k;paint()}
+  else if(a==="wk"){wk=addD(wk,+d.n);sel=addD(sel,+d.n);paint()}
+  else if(a==="now"){sel=TODAY;wk=monday(TODAY);paint()}
+  else if(a==="add")openAdd();
+  else if(a==="addsub")openAdd(d.s);
+  else if(a==="close")closeOv();
+  else if(a==="asub"){addState.sub=d.s;refreshChips();refreshList()}
+  else if(a==="aday"){addState.days.has(d.k)?addState.days.delete(d.k):addState.days.add(d.k);refreshChips()}
+  else if(a==="atopic")addTasks(addState.sub,d.t),refreshList();
+  else if(a==="acustom"){const i=$("acustom"),v=i.value.trim();if(!v){toast("Önce konuyu yaz");return}addTasks(addState.sub,v);i.value="";refreshList()}
+  else if(a==="del"){S.tasks=S.tasks.filter(x=>x.id!==d.id);save();paint()}
+  else if(a==="mv")openMove(d.id);
+  else if(a==="moveto"){const t=S.tasks.find(x=>x.id===d.id);if(t){t.date=d.k;save();closeOv();sel=d.k;paint();toast("Taşındı")}}
+  else if(a==="movedate"){const v=$("mdate").value,t=S.tasks.find(x=>x.id===d.id);if(t&&/^\d{4}-\d{2}-\d{2}$/.test(v)){t.date=v;save();closeOv();sel=v;wk=monday(v);paint();toast("Taşındı")}else toast("Geçerli bir tarih seç")}
+  else if(a==="push"){const t=S.tasks.find(x=>x.id===d.id);if(t){t.date=addD(t.date,1);t.pc=(t.pc||0)+1;save();paint();toast("Yarına ertelendi")}}
+  else if(a==="pull"){S.tasks.forEach(t=>{if(!t.done&&t.date<TODAY)t.date=TODAY});save();paint();toast("Bugüne alındı")}
+  else if(a==="goday"){sel=d.k;tab=0;paint();window.scrollTo(0,0)}
+});
+if(!S.name)S.name="Azra";$("nm").value=S.name;
+paint();
+pull();
+</script>
+</body></html>
