@@ -139,6 +139,23 @@ input:focus-visible+.box{outline:3px solid var(--red);outline-offset:3px}
 .rw{--c:var(--s-dig);display:grid;grid-template-columns:104px minmax(0,1fr) 44px;align-items:center;gap:10px;margin:8px 0;font-size:13.5px;font-weight:800}
 .rw span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rw b{text-align:right;color:var(--mut)}
 .rw .bar{margin:0}.rw .bar i{background:var(--c)}
+/* soru takibi */
+.qh{margin-top:26px}
+.qsum{display:flex;gap:7px;flex-wrap:wrap;margin:0 4px 10px}
+.qs{--c:var(--s-dig);display:inline-flex;align-items:center;gap:7px;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800}
+.qs::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c)}
+.qs b{font-family:var(--f-d);font-weight:600;color:var(--red)}
+.qrow{--c:var(--s-dig);display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:10px 12px 10px 14px;margin-bottom:8px;border-radius:20px;background:var(--card);border:2px solid var(--line)}
+.qrow .tx small{color:color-mix(in srgb,var(--c) 75%,var(--ink))}
+.qrow .qn{font:600 22px/1 var(--f-d);color:var(--c);text-align:right}
+.qrow .qn small{display:block;font:800 11px var(--f-b);color:var(--mut)}
+.add.alt{background:var(--card);color:var(--red);border:2px dashed var(--pink);box-shadow:none}
+.stepr{display:flex;gap:8px;align-items:center;margin-top:6px}
+.stepr input{text-align:center;font:600 22px var(--f-d)}
+.stepr .sm{padding:10px 14px;font-size:14px;flex:none}
+.wd .qt{display:block;margin-top:8px;font-size:13px;font-weight:800;color:var(--red)}
+.rw.q b{color:var(--ink)}
+input[type=number]{width:100%;font:700 16px var(--f-b);color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:16px;padding:11px 14px}
 /* alt bar */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;pointer-events:none;
   padding:0 max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px))}
@@ -260,8 +277,9 @@ const weekOf=k=>Array.from({length:7},(_,i)=>addD(monday(k),i));
 const long=k=>{const d=parse(k);return `${GUN[d.getDay()]}, ${d.getDate()} ${AY[d.getMonth()]}`};
 
 /* ---------- Durum ---------- */
-let S={tasks:[],name:""};
+let S={tasks:[],name:"",qs:[]};
 try{const r=JSON.parse(localStorage.getItem("pembe-plan")||"null");if(r&&Array.isArray(r.tasks))S=r}catch(e){}
+if(!Array.isArray(S.qs))S.qs=[];
 /* Veritabanı eşitleme: localStorage hızlı önbellek, asıl kayıt MongoDB'de (/api/plan) */
 let synced=false,saveT=null,failShown=false;
 function push(){
@@ -280,7 +298,7 @@ async function pull(){
     const r=await fetch("/api/plan",{cache:"no-store"});
     if(!r.ok)throw 0;
     const d=await r.json();
-    if(d&&Array.isArray(d.tasks)){S={tasks:d.tasks,name:d.name||S.name||"Azra"};try{localStorage.setItem("pembe-plan",JSON.stringify(S))}catch(e){}}
+    if(d&&Array.isArray(d.tasks)){S={tasks:d.tasks,name:d.name||S.name||"Azra",qs:Array.isArray(d.qs)&&(d.qs.length||!S.qs.length)?d.qs:S.qs};try{localStorage.setItem("pembe-plan",JSON.stringify(S))}catch(e){}}
     else if(S.tasks.length){push()}   /* sunucu boşsa eldekini yukarı taşı */
     synced=true;$("nm").value=S.name;paint();
   }catch(e){
@@ -312,13 +330,25 @@ function viewDay(){
   if(late.length)h+=`<div class="late"><div><b>${late.length} ders geride kaldı</b><small>Önceki günlerden tamamlanmayanlar</small></div><button class="sm" data-act="pull">Bugüne al</button></div>`;
   if(!tasks.length)h+=`<div class="empty">${BOWSM}<b>Bu güne henüz ders eklemedin</b>Aşağıdaki butonla bugün çalışacağın konuları seç.</div>`;
   tasks.forEach(t=>{const s=SUBJ[t.sub]||SUBJ.DIG;h+=`<div class="task${t.done?" done":""}" style="--c:var(${s.v})"><label class="ck"><input type="checkbox" data-act="tog" data-id="${t.id}"${t.done?" checked":""} aria-label="${esc(t.title)} tamamlandı"><span class="box">${CHECK}</span></label><div class="tx"><small>${s.n}</small><b>${esc(t.title)}</b>${t.pc?`<i class="pc">↻ ${t.pc} kez ertelendi</i>`:""}</div><div class="tb">${t.done?"":`<button class="sm" data-act="push" data-id="${t.id}">Yarına</button>`}<button class="sm" data-act="mv" data-id="${t.id}">Taşı</button><button class="sm x" data-act="del" data-id="${t.id}" aria-label="Sil">Sil</button></div></div>`});
-  h+=`<button class="add" data-act="add">+ Ders ekle</button></div>`;
+  h+=`<button class="add" data-act="add">+ Ders ekle</button>${qSection(sel)}</div>`;
   return h;
+}
+const qSum=a=>a.reduce((s,q)=>s+q.n,0);
+function qSection(k){
+  const L=S.qs.filter(q=>q.date===k),tot=qSum(L),by={};
+  L.forEach(q=>by[q.sub]=(by[q.sub]||0)+q.n);
+  let h=`<div class="ph qh"><h2>Çözülen sorular</h2><span>${tot?tot+" soru":""}</span></div>`;
+  if(!L.length)h+=`<p class="hint" style="margin:0 4px 10px">Bu gün çözdüğün soruları konusuyla birlikte buraya yazabilirsin.</p>`;
+  else{
+    h+=`<div class="qsum">${SK.filter(s=>by[s]).map(s=>`<span class="qs" style="--c:var(${SUBJ[s].v})">${SUBJ[s].n} <b>${by[s]}</b></span>`).join("")}</div>`;
+    L.forEach(q=>{const s=SUBJ[q.sub]||SUBJ.DIG;h+=`<div class="qrow" style="--c:var(${s.v})"><div class="tx"><small>${s.n}</small><b>${esc(q.topic||"Genel")}</b></div><div class="qn">${q.n}<small>soru</small></div><button class="sm x" data-act="qdel" data-id="${q.id}" aria-label="Sil">Sil</button></div>`});
+  }
+  return h+`<button class="add alt" data-act="addq">+ Soru ekle</button>`;
 }
 function viewWeek(){
   const wd=weekOf(wk),a=parse(wd[0]),b=parse(wd[6]);
   let h=`<div class="wk"><div class="wkh"><button class="ib" data-act="wk" data-n="-7" aria-label="Önceki hafta">‹</button><b>${a.getDate()} ${AY[a.getMonth()]} – ${b.getDate()} ${AY[b.getMonth()]}</b><button class="ib" data-act="wk" data-n="7" aria-label="Sonraki hafta">›</button></div></div><div style="height:12px"></div>`;
-  wd.forEach(k=>{const t=dayTasks(k);h+=`<div class="wd${k===TODAY?" now":""}"><header><h3>${long(k)}</h3><span>${t.length?t.filter(x=>x.done).length+"/"+t.length:""}</span></header>${t.length?`<ul>${t.map(x=>`<li class="${x.done?"done":""}" style="--c:var(${(SUBJ[x.sub]||SUBJ.DIG).v})"><span>${esc(x.title)}</span></li>`).join("")}</ul>`:`<p>Boş gün</p>`}<button class="sm go-day" data-act="goday" data-k="${k}" style="margin-top:8px">Bu günü aç</button></div>`});
+  wd.forEach(k=>{const t=dayTasks(k);h+=`<div class="wd${k===TODAY?" now":""}"><header><h3>${long(k)}</h3><span>${t.length?t.filter(x=>x.done).length+"/"+t.length:""}</span></header>${t.length?`<ul>${t.map(x=>`<li class="${x.done?"done":""}" style="--c:var(${(SUBJ[x.sub]||SUBJ.DIG).v})"><span>${esc(x.title)}</span></li>`).join("")}</ul>`:`<p>Boş gün</p>`}${(()=>{const q=qSum(S.qs.filter(x=>x.date===k));return q?`<span class="qt">${q} soru çözüldü</span>`:""})()}<button class="sm go-day" data-act="goday" data-k="${k}" style="margin-top:8px">Bu günü aç</button></div>`});
   return h;
 }
 function viewSubjects(){
@@ -332,11 +362,19 @@ function viewReport(){
   const all=S.tasks,dn=all.filter(t=>t.done).length,P=pct(all),late=all.filter(t=>!t.done&&t.date<TODAY).length,pp=all.reduce((a,t)=>a+(t.pc||0),0);
   const wd=weekOf(wk),a=parse(wd[0]),b=parse(wd[6]),data=wd.map(k=>{const t=dayTasks(k);return{k,p:t.length,d:t.filter(x=>x.done).length}}),mx=Math.max(1,...data.map(x=>x.p));
   const bars=data.map((x,i)=>{const gx=i*44+10,hp=Math.round(88*x.p/mx),hd=Math.round(88*x.d/mx);return `<rect x="${gx}" y="${112-hp}" width="34" height="${hp}" rx="8" fill="var(--line)"/><rect x="${gx}" y="${112-hd}" width="34" height="${hd}" rx="8" fill="var(--red)"/><text x="${gx+17}" y="130" text-anchor="middle" font-size="12" font-weight="800" fill="var(--mut)">${GK[parse(x.k).getDay()]}</text>${x.p?`<text x="${gx+17}" y="${107-hp}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">${x.d}/${x.p}</text>`:""}`}).join("");
+  const qw=wd.map(k=>qSum(S.qs.filter(q=>q.date===k))),qmx=Math.max(1,...qw),qtot=qSum(S.qs.filter(q=>wd.includes(q.date)));
+  const qbars=wd.map((k,i)=>{const gx=i*44+10,h=qw[i]?Math.max(6,Math.round(88*qw[i]/qmx)):4;return `<rect x="${gx}" y="${112-h}" width="34" height="${h}" rx="${h<8?2:8}" fill="${qw[i]?"var(--pink)":"var(--line)"}"/><text x="${gx+17}" y="130" text-anchor="middle" font-size="12" font-weight="800" fill="var(--mut)">${GK[parse(k).getDay()]}</text>${qw[i]?`<text x="${gx+17}" y="${107-h}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">${qw[i]}</text>`:""}`}).join("");
+  const wq=S.qs.filter(q=>wd.includes(q.date)),qsub={},qtop={};
+  wq.forEach(q=>{qsub[q.sub]=(qsub[q.sub]||0)+q.n;const kk=q.sub+"|"+(q.topic||"Genel");qtop[kk]=(qtop[kk]||0)+q.n});
+  const qsm=Math.max(1,...Object.values(qsub));
+  const qrows=SK.filter(k=>qsub[k]).map(k=>`<div class="rw q" style="--c:var(${SUBJ[k].v})"><span>${SUBJ[k].n}</span><div class="bar"><i style="--p:${Math.round(100*qsub[k]/qsm)}%"></i></div><b>${qsub[k]}</b></div>`).join("");
+  const qtops=Object.entries(qtop).sort((x,y)=>y[1]-x[1]).slice(0,8).map(([kk,n])=>{const [s,t]=kk.split("|");return `<div class="rw q" style="--c:var(${(SUBJ[s]||SUBJ.DIG).v});grid-template-columns:minmax(0,1fr) 44px"><span style="white-space:normal">${esc(t)} <small style="color:var(--mut)">· ${(SUBJ[s]||SUBJ.DIG).n}</small></span><b>${n}</b></div>`}).join("");
   const rows=SK.map(k=>{const t=all.filter(x=>x.sub===k);if(!t.length)return"";const d=t.filter(x=>x.done).length;return `<div class="rw" style="--c:var(${SUBJ[k].v})"><span>${SUBJ[k].n}</span><div class="bar"><i style="--p:${Math.round(100*d/t.length)}%"></i></div><b>${d}/${t.length}</b></div>`}).join("");
   return `<div class="ph"><h2>Rapor</h2></div>
   <div class="hero"><span class="ring dn" style="--p:${P}"><b>%${P}</b></span><div><h3>${dn}/${all.length} ders tamam</h3><p>${streak()?`${streak()} gündür planını bitiriyorsun`:"Bugünkü planı bitirince seri başlar"}</p></div></div>
   <div class="stg"><div class="st"><b>${all.length}</b><span>Planlanan</span></div><div class="st"><b>${late}</b><span>Geciken</span></div><div class="st"><b>${pp}</b><span>Erteleme</span></div></div>
   <div class="cc"><div class="wkh"><button class="ib" data-act="wk" data-n="-7" aria-label="Önceki hafta">‹</button><b>${a.getDate()} ${AY[a.getMonth()]} – ${b.getDate()} ${AY[b.getMonth()]}</b><button class="ib" data-act="wk" data-n="7" aria-label="Sonraki hafta">›</button></div><svg viewBox="0 0 318 138" role="img" aria-label="Haftalık planlanan ve biten ders sayısı">${bars}</svg><div class="lg"><span><i></i>Planlanan</span><span><i class="r"></i>Biten</span></div></div>
+  <div class="cc"><h3>Çözülen sorular · bu hafta ${qtot}</h3><svg viewBox="0 0 318 138" role="img" aria-label="Günlere göre çözülen soru sayısı">${qbars}</svg><div class="lg"><span>Tüm zamanlar: ${qSum(S.qs)} soru</span></div>${qrows?`<h3 style="margin-top:14px">Derslere göre</h3>${qrows}`:`<p class="hint">Bu hafta henüz soru girmedin.</p>`}${qtops?`<h3 style="margin-top:14px">En çok çözülen konular</h3>${qtops}`:""}</div>
   <div class="cc"><h3>Derslere göre ilerleme</h3>${rows||`<p class="hint">Ders ekledikçe burada görünecek.</p>`}</div>`;
 }
 function paint(){
@@ -346,7 +384,7 @@ function paint(){
 }
 
 /* ---------- Pencereler ---------- */
-function closeOv(){const o=$("ov");o.hidden=true;o.innerHTML="";addState=null}
+function closeOv(){const o=$("ov");o.hidden=true;o.innerHTML="";addState=null;qState=null}
 function openOv(html){const o=$("ov");o.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;o.hidden=false}
 function openAdd(sub){
   addState={sub:sub||"MAT",q:"",days:new Set([sel])};
@@ -384,6 +422,33 @@ function openMove(id){
   <div class="lbl">Ya da tarih seç</div>
   <div class="row2"><input type="date" id="mdate" value="${t.date}" aria-label="Tarih"><button class="go" data-act="movedate" data-id="${id}">Taşı</button></div>`);
 }
+let qState=null;
+function openQ(){
+  const tt=dayTasks(sel).filter(t=>t.sub!=="DIG"),seen=new Set(),quick=tt.filter(t=>{const kk=t.sub+"|"+t.title;if(seen.has(kk))return false;seen.add(kk);return true});
+  qState={sub:(quick[0]||{}).sub||"MAT",date:sel};
+  openOv(`<div class="sh"><h2>Soru ekle</h2><button class="sm" data-act="close">Kapat</button></div>
+  <p class="hint" style="margin:0 2px 4px">${long(sel)}</p>
+  ${quick.length?`<div class="lbl">Bugünkü derslerinden seç</div><div class="chips">${quick.map(t=>`<button class="chip" data-act="qpick" data-s="${t.sub}" data-t="${esc(t.title)}" style="--c:var(${SUBJ[t.sub].v})" aria-pressed="false">${esc(t.title)}</button>`).join("")}</div>`:""}
+  <div class="lbl">Ders</div><div class="chips" id="qsubs">${SK.map(k=>`<button class="chip" data-act="qsub" data-s="${k}" style="--c:var(${SUBJ[k].v})" aria-pressed="${k===qState.sub}">${SUBJ[k].n}</button>`).join("")}</div>
+  <div class="lbl">Konu (listeden seç ya da yaz)</div>
+  <input type="text" id="qt" list="qdl" placeholder="Örn. Üslü Sayılar" maxlength="80" autocomplete="off" aria-label="Konu"><datalist id="qdl"></datalist>
+  <div class="lbl">Kaç soru çözdün?</div>
+  <div class="stepr"><button class="sm" data-act="qstep" data-n="-5" aria-label="5 azalt">−5</button><input type="number" id="qn" inputmode="numeric" min="1" max="5000" placeholder="0" aria-label="Soru sayısı"><button class="sm" data-act="qstep" data-n="5" aria-label="5 artır">+5</button><button class="sm" data-act="qstep" data-n="10" aria-label="10 artır">+10</button></div>
+  <div class="row2"><button class="go" data-act="qadd" style="flex:1">Ekle</button></div>
+  <p class="hint">Aynı gün aynı konuyu tekrar eklersen sayılar toplanır.</p>`);
+  refreshQ();
+}
+function refreshQ(){
+  document.querySelectorAll("#qsubs .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.s===qState.sub));
+  const dl=$("qdl");if(dl)dl.innerHTML=SUBJ[qState.sub].pool.map(x=>`<option value="${esc(x)}">`).join("");
+}
+function addQ(){
+  const n=Math.round(Number($("qn").value)),topic=$("qt").value.trim()||"Genel";
+  if(!(n>0)){toast("Soru sayısını yaz");return}
+  const ex=S.qs.find(q=>q.date===qState.date&&q.sub===qState.sub&&q.topic===topic);
+  if(ex)ex.n+=n;else S.qs.push({id:uid(),date:qState.date,sub:qState.sub,topic,n});
+  save();paint();$("qn").value="";$("qt").value="";toast(`${n} soru eklendi`);
+}
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
 function hearts(){
   if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
@@ -409,6 +474,7 @@ document.addEventListener("input",e=>{
 });
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&!$("ov").hidden)closeOv();
+  if(e.key==="Enter"&&(e.target.id==="qn"||e.target.id==="qt")&&qState){e.preventDefault();addQ()}
   if(e.key==="Enter"&&e.target.id==="acustom"){e.preventDefault();const v=e.target.value.trim();if(v&&addState){addTasks(addState.sub,v);e.target.value=""}}
 });
 document.addEventListener("click",e=>{
@@ -432,6 +498,12 @@ document.addEventListener("click",e=>{
   else if(a==="movedate"){const v=$("mdate").value,t=S.tasks.find(x=>x.id===d.id);if(t&&/^\d{4}-\d{2}-\d{2}$/.test(v)){t.date=v;save();closeOv();sel=v;wk=monday(v);paint();toast("Taşındı")}else toast("Geçerli bir tarih seç")}
   else if(a==="push"){const t=S.tasks.find(x=>x.id===d.id);if(t){t.date=addD(t.date,1);t.pc=(t.pc||0)+1;save();paint();toast("Yarına ertelendi")}}
   else if(a==="pull"){S.tasks.forEach(t=>{if(!t.done&&t.date<TODAY)t.date=TODAY});save();paint();toast("Bugüne alındı")}
+  else if(a==="addq")openQ();
+  else if(a==="qsub"){qState.sub=d.s;refreshQ()}
+  else if(a==="qpick"){qState.sub=d.s;refreshQ();$("qt").value=d.t;$("qn").focus()}
+  else if(a==="qstep"){const i=$("qn");i.value=Math.max(0,(Number(i.value)||0)+Number(d.n))||""}
+  else if(a==="qadd")addQ();
+  else if(a==="qdel"){S.qs=S.qs.filter(x=>x.id!==d.id);save();paint()}
   else if(a==="goday"){sel=d.k;tab=0;paint();window.scrollTo(0,0)}
 });
 if(!S.name)S.name="Azra";$("nm").value=S.name;
