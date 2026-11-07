@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
 
     if (req.method === "GET") {
       const doc = await col.findOne({ _id: DOC_ID });
-      return res.status(200).json(doc ? { name: doc.name || "", tasks: doc.tasks || [] } : null);
+      return res.status(200).json(doc ? { name: doc.name || "", tasks: doc.tasks || [], qs: doc.qs || [] } : null);
     }
 
     if (req.method === "PUT") {
@@ -35,10 +35,18 @@ module.exports = async (req, res) => {
         done: !!t.done,
         ...(t.pc ? { pc: Number(t.pc) || 0 } : {}),
       }));
+      const qsIn = Array.isArray(b.qs) ? b.qs.slice(0, 10000) : [];
+      const qs = qsIn.map((q) => ({
+        id: String(q.id || "").slice(0, 40),
+        date: String(q.date || "").slice(0, 10),
+        sub: String(q.sub || "").slice(0, 20),
+        topic: String(q.topic || "").slice(0, 120),
+        n: Math.max(0, Math.min(5000, Math.round(Number(q.n) || 0))),
+      }));
       const name = String(b.name || "").slice(0, 40);
       await col.updateOne(
         { _id: DOC_ID },
-        { $set: { name, tasks, updatedAt: new Date() } },
+        { $set: { name, tasks, ...(Array.isArray(b.qs) ? { qs } : {}), updatedAt: new Date() } },
         { upsert: true }
       );
       return res.status(200).json({ ok: true });
